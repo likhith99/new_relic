@@ -1,0 +1,7 @@
+monitoring:
+  config: '/etc/newrelic-infra.yml'
+  license_key: XXXY
+  ServerName: ServerName
+  customerLongName: CustomerLongName
+  Role: Role
+  Environment: Environment

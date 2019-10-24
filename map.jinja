@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{#- Get the `tplroot` from `tpldir` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml tplroot ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml tplroot ~ "/osfamilymap.yaml" as osfamilymap %}
+{%- import_yaml tplroot ~ "/osmap.yaml" as osmap %}
+{%- import_yaml tplroot ~ "/osfingermap.yaml" as osfingermap %}
+
+{#- Retrieve the config dict only once #}
+{%- set _config = salt['config.get'](tplroot, default={}) %}
+
+{# create the default #}
+{%- set defaults = salt['grains.filter_by'](default_settings, default=tplroot) %}
+
+{# merge the osfamilymap #}
+{% set osfamily = salt['grains.filter_by'](osfamilymap, grain='os_family') or{} %}
+{% do salt['defaults.merge'](defaults, osfamily) %}
+
+{# merge the osmap #}
+{% set osmap = salt['grains.filter_by'](osmap, grain='os') or{} %}
+{% do salt['defaults.merge'](defaults, osmap) %}
+
+{# merge the osfingermap #}
+{% set osfingermap = salt['grains.filter_by'](osfingermap, grain='osfingermap') or{} %}
+{% do salt['defaults.merge'](defaults, osfingermap) %}
+
+{# merge the lookup #}
+{% set lookup = salt['pillar.get']('salt:lookup', default={}, merge=True) %}
+{% do salt['defaults.merge'](defaults, lookup) %}
+
+
+{%- set config = salt['grains.filter_by'](
+      {'defaults': defaults},
+      default='defaults',
+      merge=_config
+    )
+%}
+
+{%- set monitoring = config %}
+
+
