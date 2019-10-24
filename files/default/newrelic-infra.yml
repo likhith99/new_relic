@@ -1,0 +1,12 @@
+# EmeraldCube Solutions + New Relic infrastructure YAML configuration file 
+    license_key: {{monitoring.license_key}}
+    display_name: {{monitoring.ServerName}}
+	verbose: 0
+	log_file: /tmp/newrelic-infra.log
+	log_to_stdout: false
+	custom_attributes:
+	  customer: {{monitoring.customerLongName}}
+	  support_team: Cloud
+	  server_type: {{monitoring.Role}}
+	  environment_type: {{monitoring.Environment}}
+	  infrastructure: Amazon Cloud 	  
