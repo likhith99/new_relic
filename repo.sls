@@ -1,4 +1,7 @@
+{% from "monitoring/map.jinja" import monitoring with context %}
+
 newrelic-infra-repo:
+  {% if grains['os_family'] == 'RedHat' -%}  
   pkgrepo.managed:
     - humanname: newrelic-infra
     - name: newrelic-infra
@@ -8,3 +11,9 @@ newrelic-infra-repo:
     - repo_gpgcheck: 1
     - require_in:
       - pkg: newrelic-infra-package
+
+  {% elif grains['os_family'] == 'Suse' -%}
+  file.managed:
+    - name: /etc/zypp/repos.d/newrelic-infra.repo
+    - source: {{monitoring.path}}
+  {% endif %}

@@ -1,1 +1,3 @@
-osfamilymap: {}
+Suse: 
+  path: salt://monitoring/files/default/newrelic-infra.repo
+
